@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/login': (context) => const MyBlank(),
+        '/login': (context) => const PostPage(),
         '/skema': (context) => const Skema(),
       },
       home: LogoApp(),

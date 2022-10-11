@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_final/widget/my_text.dart';
 import 'package:my_final/pages/register.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:my_final/pages/login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
 
 class RegiterPage extends StatefulWidget {
   const RegiterPage({super.key});
@@ -11,6 +15,74 @@ class RegiterPage extends StatefulWidget {
 }
 
 class _RegiterPageState extends State<RegiterPage> {
+  List _data = [];
+  final String _tokenAuth = '';
+  late String _val;
+  final TextEditingController _inputEmail = TextEditingController();
+  final TextEditingController _inputNIM = TextEditingController();
+  final TextEditingController _inputNama = TextEditingController();
+  // final TextEditingController _inputProdi = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  // Future Get Data
+  Future _getAllData() async {
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_prodi');
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          _data = json.decode(response.body)['result'];
+        });
+      } else {
+        print('error');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error');
+    } on FormatException {
+      print('error');
+    }
+  }
+
+  Future _postDataJson() async {
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/register');
+      var response = await http.post(url, headers: {
+        'Authorization': 'Bearer ' + _tokenAuth
+      }, body: {
+        'email': _inputEmail.text,
+        'name': _inputNama.text,
+        'nim' : _inputNIM.text,
+        'prodi_id': dropdownvalue
+      });
+      if (response.statusCode == 200) {
+        print('sukses');
+        Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MyLogin()));
+      } else {
+        print('error');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error');
+    } on FormatException {
+      print('error');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Pertama Kali widget dijalankan memanggil request
+    _getAllData();
+  }
+  String dropdownvalue = 'jurusan';  
+ 
    @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -46,70 +118,143 @@ class _RegiterPageState extends State<RegiterPage> {
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 child :  Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(height: 25),
-                      Text("SIGN UP", style: MyText.title(context)!.copyWith(
-                          color: Colors.green[500], fontWeight: FontWeight.bold
-                      )),
-                      TextField(
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(labelText: "Email",
-                          labelStyle: TextStyle(color: Colors.blueGrey[400]),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
-                          ),
-                        ),
-                      ),
-                      Container(height: 25),
-                      TextField(
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(labelText: "Password",
-                          labelStyle: TextStyle(color: Colors.blueGrey[400]),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
-                          ),
-                        ),
-                      ),
-                      Container(height: 25),
-                      Container(
-                        width: double.infinity,
-                        height: 40,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Color.fromARGB(255, 14, 111, 16),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(20)
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(height: 25),
+                        Text("SIGN UP", style: MyText.title(context)!.copyWith(
+                            color: Colors.green[500], fontWeight: FontWeight.bold
+                        )),
+                        TextFormField(
+                          controller: _inputNama,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Nama tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(labelText: "Nama Lengkap",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
                             ),
                           ),
-                          child: Text("SUBMIT", style: TextStyle(color: Colors.white),),
-                          onPressed: () {},
                         ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: TextButton(
-                          style: TextButton.styleFrom(primary: Colors.transparent),
-                          child: Text("Sign in", style: TextStyle(color: Color.fromARGB(255, 14, 111, 16)),),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const MyLogin()),
-                            );
+                        Container(height: 10),
+                        TextFormField(
+                          controller: _inputNIM,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'NIM tidak boleh kosong';
+                            }
+                            return null;
                           },
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(labelText: "NIM",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                        Container(height: 10),
+                        TextFormField(
+                          controller: _inputEmail,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'E-mail tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(labelText: "E-mail",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
+                            ),
+                          ),
+                        ),
+                        Container(height: 10),
+                        DropdownButtonFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Prodi tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(labelText: "Jurusan - Program Studi",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
+                            ),
+                          ),
+                          // value: dropdownvalue,
+                            icon: const Icon(Icons.keyboard_arrow_down), 
+                          items: _data.map((items) {
+                              return DropdownMenuItem(
+                                value: items['id_prodi'].toString(),
+                                child: AutoSizeText(items['nama_jurusan']+' - '+items['nama_prodi'], style: TextStyle(fontSize: 15), maxLines: 1,),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownvalue = newValue!;
+                              });
+                            },
+                        ),
+                        
+                        Container(height: 25),
+                        Container(
+                          width: double.infinity,
+                          height: 40,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Color.fromARGB(255, 14, 111, 16),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(20)
+                              ),
+                            ),
+                            child: Text("SUBMIT", style: TextStyle(color: Colors.white),),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _postDataJson();
+                              }
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(primary: Colors.transparent),
+                            child: Text("Sign in", style: TextStyle(color: Color.fromARGB(255, 14, 111, 16)),),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const MyLogin()),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               )

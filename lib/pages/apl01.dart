@@ -14,12 +14,12 @@ class _Apl01PageState extends State<Apl01Page> {
    @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text('APL-01'),
       ),
       body: Stack(
         children: <Widget>[
+          SizedBox(height: 20,),
           Column(
             children: <Widget>[
               Container(

@@ -64,6 +64,7 @@ final Uri _url = Uri.parse('https://flutter.dev');
     return Scaffold(
       appBar: AppBar(
         title: const Text('LSP'),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         child: SingleChildScrollView(
