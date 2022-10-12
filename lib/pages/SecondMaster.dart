@@ -3,7 +3,7 @@ import 'package:my_final/pages/home.dart';
 import 'package:my_final/pages/skema.dart';
 import 'package:my_final/pages/blank.dart';
 import 'package:my_final/pages/login.dart';
-import 'package:my_final/pages/validasi.dart';
+import 'package:my_final/pages/waiting.dart';
 import 'package:my_final/pages/activity.dart';
 import 'package:my_final/pages/profile.dart';
 

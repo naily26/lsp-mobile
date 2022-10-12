@@ -224,10 +224,10 @@ final Uri _url = Uri.parse('https://flutter.dev');
                         height:54,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color.fromARGB(122, 167, 165, 165),
+                            color: Color.fromARGB(255, 14, 111, 16),
                           ),
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(5))
+                          borderRadius: BorderRadius.all(Radius.circular(6))
                         ),
                         child: Center(
                           child: Text(

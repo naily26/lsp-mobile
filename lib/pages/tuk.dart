@@ -55,14 +55,14 @@ class _TUKState extends State<TUK> {
           itemCount: _data.length,
           itemBuilder: (context, index) {
             return  Padding(
-            padding: EdgeInsets.only(top: 20, right: 15, left: 18),
+            padding: EdgeInsets.only(top: 15, right: 15, left: 18),
             child:Container(
               width: (MediaQuery.of(context).size.width)-40,
               height: 150,
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 border: Border(
-                  // top: BorderSide(width: 5.0, color: Color.fromARGB(255, 14, 111, 16)),
+                  top: BorderSide(width: 1.0, color: Color.fromARGB(255, 14, 111, 16)),
                   bottom: BorderSide(width: 1.0, color: Color.fromARGB(255, 14, 111, 16)),
                   left: BorderSide(width: 5.0, color: Color.fromARGB(255, 14, 111, 16)),
                   right: BorderSide(width: 1.0, color: Color.fromARGB(255, 14, 111, 16))

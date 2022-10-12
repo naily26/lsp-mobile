@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_final/data/img.dart';
 import 'package:my_final/data/my_colors.dart';
 import 'package:my_final/pages/home.dart';
+import 'package:my_final/pages/waiting.dart';
+import 'package:my_final/pages/decline.dart';
+import 'package:my_final/pages/approve.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:my_final/widget/my_text.dart';
 import 'package:my_final/pages/register.dart';
@@ -23,20 +27,45 @@ class _MyLoginState extends State<MyLogin> {
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  var UserId;
+  var _data;
+  // List<dynamic> _data = [];
+  
+  get userdata => null;
 
   Future _postDataJson() async {
     try {
-      var url = Uri.parse('https://lsp-api.000webhostapp.com/api/sign-in');
+      var url = Uri.parse('https://lsp.intermediatech.id/api/sign-in');
       var response = await http.post(url, headers: {
         'Authorization': 'Bearer ' + _tokenAuth
       }, body: {
         'email': _inputEmail.text,
         'password': _inputPassword.text,
       });
+      setState(() {
+          _data = json.decode(response.body)['data'];
+      });
       if (response.statusCode == 200) {
+        print(_data['user_id']);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        postData(_data['user_id']); 
         print('sukses');
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MyMaster()));
+        if(_data['status'] == 'approve') {
+          if(_data['nik'] == null) {
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ValidasiApprove()));
+          } else {
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MyMaster()));
+          }
+        } else if(_data['status'] == 'decline'){
+          Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ValidasiDecline()));
+        } else {
+          Navigator.push(context,
+          MaterialPageRoute(builder: (context) => Validasi()));
+        }
+        
       } else {
         print('error');
       }
@@ -49,6 +78,10 @@ class _MyLoginState extends State<MyLogin> {
     }
   }
 
+  postData(UserId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('UserId', UserId);
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

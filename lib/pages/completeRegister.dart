@@ -8,14 +8,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 
-class RegiterPage extends StatefulWidget {
-  const RegiterPage({super.key});
+class CompleteRegiterPage extends StatefulWidget {
+  const CompleteRegiterPage({super.key});
 
   @override
-  State<RegiterPage> createState() => _RegiterPageState();
+  State<CompleteRegiterPage> createState() => _CompleteRegiterPageState();
 }
 
-class _RegiterPageState extends State<RegiterPage> {
+class _CompleteRegiterPageState extends State<CompleteRegiterPage> {
   List _data = [];
   final String _tokenAuth = '';
   late String _val;
@@ -125,7 +125,7 @@ class _RegiterPageState extends State<RegiterPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(height: 25),
-                        Text("SIGN UP", style: MyText.title(context)!.copyWith(
+                        Text("Complete Registration", style: MyText.title(context)!.copyWith(
                             color: Colors.green[500], fontWeight: FontWeight.bold
                         )),
                         TextFormField(
@@ -221,7 +221,27 @@ class _RegiterPageState extends State<RegiterPage> {
                               });
                             },
                         ),
-                        
+                        Container(height: 10),
+                        TextFormField(
+                          controller: _inputNIM,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'NIM tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(labelText: "NIK",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
+                            ),
+                          ),
+                        ),
                         Container(height: 25),
                         Container(
                           width: double.infinity,

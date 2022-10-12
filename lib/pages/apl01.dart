@@ -11,7 +11,7 @@ class Apl01Page extends StatefulWidget {
 }
 
 class _Apl01PageState extends State<Apl01Page> {
-   @override
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
@@ -19,7 +19,9 @@ class _Apl01PageState extends State<Apl01Page> {
       ),
       body: Stack(
         children: <Widget>[
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 50,
+          ),
           Column(
             children: <Widget>[
               Container(
@@ -32,64 +34,67 @@ class _Apl01PageState extends State<Apl01Page> {
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 60),
-                //   child: Text("APL-01", style: MyText.headline(context)!.copyWith(color: Colors.white)),
-                // ),
+              
                 Container(height: 40),
                 Card(
-                  shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(1)),
-                  color: Colors.white, elevation: 2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1)),
+                  color: Colors.white,
+                  elevation: 2,
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Template dokumen APL sudah tersedia, silahkan download, isi, dan upload kembali.',
-                             style: MyText.body2(context)!.copyWith(color: MyColors.grey_60)
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.text_snippet_outlined,
-                                  color: Colors.black,
-                                  size: 21.0,
-                                ),
-                                Text('dokumen.pdf',
-                                  style: MyText.body2(context)!.copyWith(color: MyColors.grey_60)
-                                ),
-                                Container(width: 10,),
-                                Container(
-                                  height: 28,
-                                  child: ElevatedButton(
-                                    child: Text('Upload Apl-01', style: TextStyle(fontSize: 12)),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.blue[900],
-                                      shape: RoundedRectangleBorder(
-                                                    borderRadius: new BorderRadius.circular(4))
-                                    ),
-                                    onPressed: () {},
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            Text(
+                                'Template dokumen APL sudah tersedia, silahkan download, isi, dan upload kembali.',
+                                style: MyText.body2(context)!
+                                    .copyWith(color: MyColors.grey_60)),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.text_snippet_outlined,
+                                    color: Colors.black,
+                                    size: 21.0,
                                   ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ),
+                                  Text('dokumen.pdf',
+                                      style: MyText.body2(context)!
+                                          .copyWith(color: MyColors.grey_60)),
+                                  Container(
+                                    width: 10,
+                                  ),
+                                  Container(
+                                    height: 28,
+                                    child: ElevatedButton(
+                                      child: Text('Upload Apl-01',
+                                          style: TextStyle(fontSize: 12)),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.blue[900],
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      4))),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
                 ),
                 Container(height: 5),
                 Card(
-                  shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(1)),
-                  color: Colors.white, elevation: 2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1)),
+                  color: Colors.white,
+                  elevation: 2,
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: Column(
@@ -97,7 +102,9 @@ class _Apl01PageState extends State<Apl01Page> {
                       Container(
                         width: double.infinity,
                         padding: EdgeInsets.all(15),
-                        child: Text("Dokumen", style: MyText.body2(context)!.copyWith(color: MyColors.grey_40)),
+                        child: Text("Dokumen",
+                            style: MyText.body2(context)!
+                                .copyWith(color: MyColors.grey_40)),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),
@@ -105,20 +112,28 @@ class _Apl01PageState extends State<Apl01Page> {
                           children: <Widget>[
                             Row(
                               children: <Widget>[
-                                Icon(Icons.text_snippet_outlined, color: MyColors.grey_40),
+                                Icon(Icons.text_snippet_outlined,
+                                    color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("dokumen-apl-01.pdf", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                Text("dokumen-apl-01.pdf",
+                                    style: MyText.body2(context)!
+                                        .copyWith(color: MyColors.grey_60))
                               ],
                             ),
                             Container(height: 10),
-                            Container(width: double.infinity, height: 1, color: MyColors.grey_20)
+                            Container(
+                                width: double.infinity,
+                                height: 1,
+                                color: MyColors.grey_20)
                           ],
                         ),
                       ),
                       Container(
                         width: double.infinity,
                         padding: EdgeInsets.all(15),
-                        child: Text("Info", style: MyText.body2(context)!.copyWith(color: MyColors.grey_40)),
+                        child: Text("Info",
+                            style: MyText.body2(context)!
+                                .copyWith(color: MyColors.grey_40)),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),
@@ -128,7 +143,9 @@ class _Apl01PageState extends State<Apl01Page> {
                               children: <Widget>[
                                 Icon(Icons.event, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("11-02-2022", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                Text("11-02-2022",
+                                    style: MyText.body2(context)!
+                                        .copyWith(color: MyColors.grey_60))
                               ],
                             ),
                             Container(height: 10),
@@ -140,14 +157,19 @@ class _Apl01PageState extends State<Apl01Page> {
                             //   ],
                             // ),
                             // Container(height: 10),
-                            Container(width: double.infinity, height: 1, color: MyColors.grey_20)
+                            Container(
+                                width: double.infinity,
+                                height: 1,
+                                color: MyColors.grey_20)
                           ],
                         ),
                       ),
                       Container(
                         width: double.infinity,
                         padding: EdgeInsets.all(15),
-                        child: Text("Status", style: MyText.body2(context)!.copyWith(color: MyColors.grey_40)),
+                        child: Text("Status",
+                            style: MyText.body2(context)!
+                                .copyWith(color: MyColors.grey_40)),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),
@@ -157,7 +179,9 @@ class _Apl01PageState extends State<Apl01Page> {
                               children: <Widget>[
                                 Icon(Icons.layers, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("Asessment dilanjutkan", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                Text("Asessment dilanjutkan",
+                                    style: MyText.body2(context)!
+                                        .copyWith(color: MyColors.grey_60))
                               ],
                             ),
                             Container(height: 10),

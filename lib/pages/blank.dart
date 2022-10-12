@@ -1,109 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_final/pages/SecondMaster.dart';
 
-class PostPage extends StatefulWidget {
-  const PostPage({Key? key}) : super(key: key);
+class BlankData extends StatefulWidget {
+  const BlankData({super.key});
 
   @override
-  _PostPageState createState() => _PostPageState();
+  State<BlankData> createState() => _BlankDataState();
 }
 
-class _PostPageState extends State<PostPage> {
-  final String _tokenAuth = '';
-  final TextEditingController _inputEmail = TextEditingController();
-  final TextEditingController _inputPassword = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  Future _postDataJson() async {
-    try {
-      var url = Uri.parse('https://lsp-api.000webhostapp.com/api/sign-in');
-      var response = await http.post(url, headers: {
-        'Authorization': 'Bearer ' + _tokenAuth
-      }, body: {
-        'email': _inputEmail.text,
-        'password': _inputPassword.text,
-      });
-      if (response.statusCode == 200) {
-        print('sukses');
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MyMaster()));
-      } else {
-        print('error');
-      }
-    } on SocketException {
-      print('no internet');
-    } on HttpException {
-      print('error');
-    } on FormatException {
-      print('error');
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _BlankDataState extends State<BlankData> {
+  var UserId;
+   Future _getAllData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserId = prefs.getInt('UserId');
+   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Sign In'),
-        ),
-        body: Center(
-          child: Container(
-            padding: EdgeInsets.all(20),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    controller: _inputEmail,
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Email tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _inputPassword,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Password tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _postDataJson();
-                        }
-                      },
-                      child: Text('Submit'))
-                ],
-              ),
-            ),
-          ),
-        ));
+    return Container();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_final/pages/blank.dart';
+import 'package:my_final/pages/login.dart';
 import 'package:my_final/pages/splash.dart';
 import 'package:my_final/pages/skema.dart';
 
@@ -18,15 +19,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 14, 111, 16),
-          iconTheme: IconThemeData(color: Colors.white),
+          // backgroundColor: Color.fromARGB(255, 14, 111, 16),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
           centerTitle: true,
-          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+          titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
         ),
       ),
       initialRoute: '/',
       routes: {
-        '/login': (context) => const PostPage(),
+        '/login': (context) => const MyLogin(),
         '/skema': (context) => const Skema(),
       },
       home: LogoApp(),
