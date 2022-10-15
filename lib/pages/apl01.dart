@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_final/data/img.dart';
 import 'package:my_final/data/my_colors.dart';
 import 'package:my_final/widget/my_text.dart';
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Apl01Page extends StatefulWidget {
   const Apl01Page({super.key});
@@ -11,6 +15,28 @@ class Apl01Page extends StatefulWidget {
 }
 
 class _Apl01PageState extends State<Apl01Page> {
+  String fileurl = "https://fluttercampus.com/sample.pdf";
+
+  void _showToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Template APL-01 berhasil diunduh'),
+        action: SnackBarAction(label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  void _showToastFailed(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Template APL-01 gagal diunduh', style: TextStyle(color: Colors.red),),
+        action: SnackBarAction(label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -34,7 +60,6 @@ class _Apl01PageState extends State<Apl01Page> {
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
-              
                 Container(height: 40),
                 Card(
                   shape: RoundedRectangleBorder(
@@ -57,20 +82,70 @@ class _Apl01PageState extends State<Apl01Page> {
                               padding: const EdgeInsets.only(top: 6),
                               child: Row(
                                 children: [
-                                  Icon(
-                                    Icons.text_snippet_outlined,
-                                    color: Colors.black,
-                                    size: 21.0,
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Map<Permission, PermissionStatus>
+                                          statuses = await [
+                                        Permission.storage,
+                                        //add more permission to request here.
+                                      ].request();
+                                      if (statuses[Permission.storage]!
+                                          .isGranted) {
+                                        var dir = await DownloadsPathProvider
+                                            .downloadsDirectory;
+                                        if (dir != null) {
+                                          String savename = "apl-01.pdf";
+                                          String savePath =
+                                              dir.path + "/$savename";
+                                          print(savePath);
+                                          //output:  /storage/emulated/0/Download/banner.png
+
+                                          try {
+                                            await Dio()
+                                                .download(fileurl, savePath,
+                                                    onReceiveProgress:
+                                                        (received, total) {
+                                              if (total != -1) {
+                                                print((received / total * 100)
+                                                        .toStringAsFixed(0) +
+                                                    "%");
+                                                //you can build progressbar feature too
+                                              }
+                                            });
+                                            print(
+                                                "File is saved to download folder.");
+                                                return _showToast(context);
+                                          } on DioError catch (e) {
+                                            print(e.message);
+                                          }
+                                        }
+                                      } else {
+                                        print(
+                                            "No permission to read and write.");
+                                            return _showToastFailed(context);
+                                      }
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.text_snippet_outlined,
+                                          color: Colors.black,
+                                          size: 21.0,
+                                        ),
+                                        Text('dokumen.pdf',
+                                            style: MyText.body2(context)!
+                                                .copyWith(
+                                                    color: MyColors.grey_60)),
+                                      ],
+                                    ),
                                   ),
-                                  Text('dokumen.pdf',
-                                      style: MyText.body2(context)!
-                                          .copyWith(color: MyColors.grey_60)),
                                   Container(
                                     width: 10,
                                   ),
                                   Container(
                                     height: 28,
                                     child: ElevatedButton(
+                                      
                                       child: Text('Upload Apl-01',
                                           style: TextStyle(fontSize: 12)),
                                       style: ElevatedButton.styleFrom(
@@ -79,7 +154,8 @@ class _Apl01PageState extends State<Apl01Page> {
                                               borderRadius:
                                                   new BorderRadius.circular(
                                                       4))),
-                                      onPressed: () {},
+                                      onPressed: () => _showToast(context),
+
                                     ),
                                   ),
                                 ],

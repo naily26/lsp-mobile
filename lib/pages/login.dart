@@ -29,6 +29,7 @@ class _MyLoginState extends State<MyLogin> {
   final _formKey = GlobalKey<FormState>();
   var UserId;
   var _data;
+  var _message;
   // List<dynamic> _data = [];
   
   get userdata => null;
@@ -44,6 +45,7 @@ class _MyLoginState extends State<MyLogin> {
       });
       setState(() {
           _data = json.decode(response.body)['data'];
+          _message = json.decode(response.body)['message'];
       });
       if (response.statusCode == 200) {
         print(_data['user_id']);
@@ -71,6 +73,7 @@ class _MyLoginState extends State<MyLogin> {
         
       } else {
         print('error');
+        return _showToast(_message.toString(), context);
       }
     } on SocketException {
       print('no internet');
@@ -79,6 +82,16 @@ class _MyLoginState extends State<MyLogin> {
     } on FormatException {
       print('error');
     }
+  }
+
+  void _showToast(String mesg, BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(mesg),
+        action: SnackBarAction(label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
   }
 
   postData(UserId, UserName, nim, jurusan, prodi, email, no_telepon, alamat, kabupaten, provinsi, pekerjaan, pendidikan, jk, tmpl , tgll, nik ) async {
