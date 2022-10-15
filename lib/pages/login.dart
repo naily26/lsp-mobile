@@ -48,7 +48,10 @@ class _MyLoginState extends State<MyLogin> {
       if (response.statusCode == 200) {
         print(_data['user_id']);
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        postData(_data['user_id']); 
+        postData(_data['user_id'], _data['name'], _data['nim'], _data['jurusan']['nama'], _data['prodi']['nama'], _data['user']['email'],
+        _data['no_telepon'], _data['alamat'], _data['kode_kabupaten'], _data['kode_provinsi'], _data['kode_pekerjaan'], _data['kode_pendidikan'],
+        _data['jenis_kelamin'], _data['tempat_lahir'], _data['tanggal_lahir'],  _data['nik'],
+        ); 
         print('sukses');
         if(_data['status'] == 'approve') {
           if(_data['nik'] == null) {
@@ -78,9 +81,24 @@ class _MyLoginState extends State<MyLogin> {
     }
   }
 
-  postData(UserId) async {
+  postData(UserId, UserName, nim, jurusan, prodi, email, no_telepon, alamat, kabupaten, provinsi, pekerjaan, pendidikan, jk, tmpl , tgll, nik ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('UserId', UserId);
+    prefs.setString('UserName', UserName);
+    prefs.setString('nim', nim);
+    prefs.setString('prodi', prodi);
+    prefs.setString('jurusan', jurusan);
+    prefs.setString('email', email);
+    prefs.setString('no_telepon', no_telepon);
+    prefs.setString('alamat', alamat);
+    prefs.setString('kabupaten', kabupaten);
+    prefs.setString('provinsi', provinsi);
+    prefs.setString('pekerjaan', pekerjaan);
+    prefs.setString('pendidikan', pendidikan);
+    prefs.setString('jk', jk);
+    prefs.setString('tmpl', tmpl);
+    prefs.setString('tgll', tgll);
+    prefs.setString('nik', nik);
   }
   @override
   Widget build(BuildContext context) {
