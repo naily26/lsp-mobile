@@ -48,6 +48,8 @@ dependencies:
   downloads_path_provider_28: ^0.1.2
   permission_handler: ^8.3.0
   dio: ^4.0.4
+  pdf: ^3.8.3
+  
 
 dev_dependencies:
   flutter_test:

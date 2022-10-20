@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_final/pages/blank.dart';
-import 'package:my_final/pages/master.dart';
+import 'package:my_final/pages/layout/master.dart';
 
 
 class AnimatedLogo extends AnimatedWidget {

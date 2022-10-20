@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_final/pages/completeRegister.dart';
+import 'package:my_final/pages/auth/completeRegister.dart';
 
 class ValidasiApprove extends StatefulWidget {
   const ValidasiApprove({super.key});

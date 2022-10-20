@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_final/data/my_colors.dart';
 import 'package:my_final/widget/my_text.dart';
-import 'package:my_final/pages/master.dart';
+import 'package:my_final/pages/layout/master.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -19,34 +19,6 @@ class _ProfilePageState extends State<ProfilePage> {
   List _data = [];
   final String _tokenAuth = '';
 
-  // var UserId;
-  //  Future _getAllData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   UserId = prefs.getInt('UserId');
-  //   // print(UserId);
-  //   try {
-  //     var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_user/' + UserId.toString());
-  //     var response = await http.get(
-  //       url,
-  //       headers: {'Authorization': 'Bearer ' + _tokenAuth},
-  //     );
-  //     if (response.statusCode == 200) {
-  //       setState(() {
-  //          _data = json.decode(response.body)['data'];
-  //       }
-  //       );
-  //     } else {
-  //       print('error');
-  //     }
-  //   } on SocketException {
-  //     print('no internet');
-  //   } on HttpException {
-  //     print('error');
-  //   } on FormatException {
-  //     print('error');
-  //   }
-  //  }
-
   var UserId;
   String UserName = '';
   String email = '';
@@ -63,6 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String tmpl = '';
   String tgll = '';
   String nik = '';
+
   Future _getAllDataUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserId = prefs.getInt('UserId');
@@ -81,6 +54,16 @@ class _ProfilePageState extends State<ProfilePage> {
     tmpl = prefs.getString('tmpl').toString();
     tgll = prefs.getString('tgll').toString();
     nik = prefs.getString('nik').toString();
+  }
+
+  LogOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    return Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyMaster()),
+                          );
   }
 
   @override
@@ -129,11 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: GestureDetector(
                         child: Text("Log Out"),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyMaster()),
-                          );
+                         LogOut();
                         },
                       ),
                     ),

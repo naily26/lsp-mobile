@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:my_final/pages/master.dart';
+import 'package:my_final/pages/layout/master.dart';
 
-class ValidasiDecline extends StatefulWidget {
-  const ValidasiDecline({super.key});
+class Validasi extends StatefulWidget {
+  const Validasi({super.key});
 
   @override
-  State<ValidasiDecline> createState() => _ValidasiDeclineState();
+  State<Validasi> createState() => _ValidasiState();
 }
 
-class _ValidasiDeclineState extends State<ValidasiDecline> {
+class _ValidasiState extends State<Validasi> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -38,10 +38,10 @@ class _ValidasiDeclineState extends State<ValidasiDecline> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
                   child: Text(
-                    'Akun Anda Tidak Terdaftar di Data Kampus Silahkan hubungi admin untuk informasi lebih lanjut!',
+                    'Data Anda dalam tahap verifikasi admin, silahkan tunggu',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300, fontFamily: 'Inter',
-                    fontSize: 15),
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300,
+                    fontSize: 16),
                   ),
                 ),
                 // Container(
@@ -57,7 +57,7 @@ class _ValidasiDeclineState extends State<ValidasiDecline> {
                 //     onPressed: () {},
                 //   ),
                 // ),
-               GestureDetector(
+                GestureDetector(
                   child: Container(
                     height: 40,
                     width: 150,

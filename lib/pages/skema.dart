@@ -20,14 +20,14 @@ class _SkemaState extends State<Skema> {
   // Future Get Data
   Future _getAllData() async {
     try {
-      var url = Uri.parse('https://lsp-api.000webhostapp.com/api/get_kompetensi');
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_kompetensi');
       var response = await http.get(
         url,
         headers: {'Authorization': 'Bearer ' + _tokenAuth},
       );
       if (response.statusCode == 200) {
         setState(() {
-          _data = json.decode(response.body);
+          _data = json.decode(response.body)['result'];
         });
       } else {
         print('error');

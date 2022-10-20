@@ -1,79 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:my_final/data/img.dart';
-import 'package:my_final/data/my_colors.dart';
-import 'package:my_final/pages/home.dart';
-import 'package:my_final/pages/waiting.dart';
-import 'package:my_final/pages/decline.dart';
-import 'package:my_final/pages/approve.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 import 'package:my_final/widget/my_text.dart';
-import 'package:my_final/pages/register.dart';
+import 'package:my_final/pages/auth/register.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:my_final/pages/auth/login.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:my_final/pages/SecondMaster.dart';
 
-class MyLogin extends StatefulWidget {
-  const MyLogin({super.key});
+class RegiterPage extends StatefulWidget {
+  const RegiterPage({super.key});
 
   @override
-  State<MyLogin> createState() => _MyLoginState();
+  State<RegiterPage> createState() => _RegiterPageState();
 }
 
-class _MyLoginState extends State<MyLogin> {
-  
+class _RegiterPageState extends State<RegiterPage> {
+  List _data = [];
   final String _tokenAuth = '';
+  late String _val;
   final TextEditingController _inputEmail = TextEditingController();
-  final TextEditingController _inputPassword = TextEditingController();
+  final TextEditingController _inputNIM = TextEditingController();
+  final TextEditingController _inputNama = TextEditingController();
+  // final TextEditingController _inputProdi = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var UserId;
-  var _data;
-  var _message;
-  // List<dynamic> _data = [];
-  
-  get userdata => null;
 
-  Future _postDataJson() async {
+  // Future Get Data
+  Future _getAllData() async {
     try {
-      var url = Uri.parse('https://lsp.intermediatech.id/api/sign-in');
-      var response = await http.post(url, headers: {
-        'Authorization': 'Bearer ' + _tokenAuth
-      }, body: {
-        'email': _inputEmail.text,
-        'password': _inputPassword.text,
-      });
-      setState(() {
-          _data = json.decode(response.body)['data'];
-          _message = json.decode(response.body)['message'];
-      });
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_prodi');
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
       if (response.statusCode == 200) {
-        print(_data['user_id']);
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        postData(_data['user_id'], _data['name'], _data['nim'], _data['jurusan']['nama'], _data['prodi']['nama'], _data['user']['email'],
-        _data['no_telepon'], _data['alamat'], _data['kode_kabupaten'], _data['kode_provinsi'], _data['kode_pekerjaan'], _data['kode_pendidikan'],
-        _data['jenis_kelamin'], _data['tempat_lahir'], _data['tanggal_lahir'],  _data['nik'],
-        ); 
-        print('sukses');
-        if(_data['status'] == 'approve') {
-          if(_data['nik'] == null) {
-            Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ValidasiApprove()));
-          } else {
-            Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MyMaster()));
-          }
-        } else if(_data['status'] == 'decline'){
-          Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ValidasiDecline()));
-        } else {
-          Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Validasi()));
-        }
-        
+        setState(() {
+          _data = json.decode(response.body)['result'];
+        });
       } else {
         print('error');
-        return _showToast(_message.toString(), context);
       }
     } on SocketException {
       print('no internet');
@@ -84,36 +49,42 @@ class _MyLoginState extends State<MyLogin> {
     }
   }
 
-  void _showToast(String mesg, BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: Text(mesg),
-        action: SnackBarAction(label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
-      ),
-    );
+  Future _postDataJson() async {
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/register');
+      var response = await http.post(url, headers: {
+        'Authorization': 'Bearer ' + _tokenAuth
+      }, body: {
+        'email': _inputEmail.text,
+        'name': _inputNama.text,
+        'nim' : _inputNIM.text,
+        'prodi_id': dropdownvalue
+      });
+      if (response.statusCode == 200) {
+        print('sukses');
+        Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MyLogin()));
+      } else {
+        print('error');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error');
+    } on FormatException {
+      print('error');
+    }
   }
 
-  postData(UserId, UserName, nim, jurusan, prodi, email, no_telepon, alamat, kabupaten, provinsi, pekerjaan, pendidikan, jk, tmpl , tgll, nik ) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('UserId', UserId);
-    prefs.setString('UserName', UserName);
-    prefs.setString('nim', nim);
-    prefs.setString('prodi', prodi);
-    prefs.setString('jurusan', jurusan);
-    prefs.setString('email', email);
-    prefs.setString('no_telepon', no_telepon);
-    prefs.setString('alamat', alamat);
-    prefs.setString('kabupaten', kabupaten);
-    prefs.setString('provinsi', provinsi);
-    prefs.setString('pekerjaan', pekerjaan);
-    prefs.setString('pendidikan', pendidikan);
-    prefs.setString('jk', jk);
-    prefs.setString('tmpl', tmpl);
-    prefs.setString('tgll', tgll);
-    prefs.setString('nik', nik);
-  }
   @override
+  void initState() {
+    super.initState();
+    // Pertama Kali widget dijalankan memanggil request
+    _getAllData();
+  }
+  String dropdownvalue = 'jurusan';  
+ 
+   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       resizeToAvoidBottomInset: false,
@@ -154,42 +125,20 @@ class _MyLoginState extends State<MyLogin> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(height: 25),
-                        Text("SIGN IN", style: MyText.title(context)!.copyWith(
+                        Text("SIGN UP", style: MyText.title(context)!.copyWith(
                             color: Colors.green[500], fontWeight: FontWeight.bold
                         )),
                         TextFormField(
-                          controller: _inputEmail,
-                           validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Email tidak boleh kosong';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.text,
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(labelText: "Email",
-                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
-                            ),
-                          ),
-                        ),
-                        Container(height: 25),
-                        TextFormField(
-                          controller: _inputPassword,
+                          controller: _inputNama,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Password tidak boleh kosong';
+                              return 'Nama tidak boleh kosong';
                             }
                             return null;
                           },
                           keyboardType: TextInputType.text,
-                          obscureText: true,
                           style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(labelText: "Password",
+                          decoration: InputDecoration(labelText: "Nama Lengkap",
                             labelStyle: TextStyle(color: Colors.blueGrey[400]),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
@@ -199,14 +148,81 @@ class _MyLoginState extends State<MyLogin> {
                             ),
                           ),
                         ),
+                        Container(height: 10),
+                        TextFormField(
+                          controller: _inputNIM,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'NIM tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(labelText: "NIM",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
+                            ),
+                          ),
+                        ),
+                        Container(height: 10),
+                        TextFormField(
+                          controller: _inputEmail,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'E-mail tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(labelText: "E-mail",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
+                            ),
+                          ),
+                        ),
+                        Container(height: 10),
+                        DropdownButtonFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Prodi tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(labelText: "Jurusan - Program Studi",
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueGrey[400]!, width: 2),
+                            ),
+                          ),
+                          // value: dropdownvalue,
+                            icon: const Icon(Icons.keyboard_arrow_down), 
+                          items: _data.map((items) {
+                              return DropdownMenuItem(
+                                value: items['id_prodi'].toString(),
+                                child: AutoSizeText(items['nama_jurusan']+' - '+items['nama_prodi'], style: TextStyle(fontSize: 15), maxLines: 1,),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownvalue = newValue!;
+                              });
+                            },
+                        ),
+                        
                         Container(height: 25),
-                        // ElevatedButton(
-                        // onPressed: () {
-                        //   if (_formKey.currentState!.validate()) {
-                        //     _postDataJson();
-                        //   }
-                        // },
-                        // child: Text('Submit')),
                         Container(
                           width: double.infinity,
                           height: 40,
@@ -218,7 +234,7 @@ class _MyLoginState extends State<MyLogin> {
                               ),
                             ),
                             child: Text("SUBMIT", style: TextStyle(color: Colors.white),),
-                             onPressed: () {
+                            onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 _postDataJson();
                               }
@@ -229,11 +245,11 @@ class _MyLoginState extends State<MyLogin> {
                           width: double.infinity,
                           child: TextButton(
                             style: TextButton.styleFrom(primary: Colors.transparent),
-                            child: Text("Buat akun baru", style: TextStyle(color: Color.fromARGB(255, 14, 111, 16)),),
+                            child: Text("Sign in", style: TextStyle(color: Color.fromARGB(255, 14, 111, 16)),),
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const RegiterPage()),
+                                MaterialPageRoute(builder: (context) => const MyLogin()),
                               );
                             },
                           ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_final/pages/master.dart';
-import 'package:my_final/pages/login.dart';
+import 'package:my_final/pages/layout/master.dart';
+import 'package:my_final/pages/auth/login.dart';
 import 'package:my_final/widget/my_text.dart';
-import 'package:my_final/pages/register.dart';
+import 'package:my_final/pages/auth/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:my_final/pages/login.dart';
+import 'package:my_final/pages/auth/login.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -83,7 +83,7 @@ class _CompleteRegiterPageState extends State<CompleteRegiterPage> {
             'no_telepon': _inputNoTelepon.text,
             'tempat_lahir': _inputTempatLahir.text,
             'kompetensi_id': dropdownvalueSkema,
-            'tanggal_uji': _inputTanggaUji.text,
+            'tgl_uji': _inputTanggaUji.text,
             'tanggal_pembekalan': _inputTanggaPembekalan.text,
             'password': _inputPassword.text
             });

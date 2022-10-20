@@ -17,7 +17,7 @@ class _TUKState extends State<TUK> {
   // Future Get Data
   Future _getAllData() async {
     try {
-      var url = Uri.parse('https://lsp-api.000webhostapp.com/api/get_tuk');
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_tuk');
       var response = await http.get(
         url,
         headers: {'Authorization': 'Bearer ' + _tokenAuth},

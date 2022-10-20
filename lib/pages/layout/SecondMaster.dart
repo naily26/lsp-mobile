@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_final/pages/home.dart';
 import 'package:my_final/pages/skema.dart';
 import 'package:my_final/pages/blank.dart';
-import 'package:my_final/pages/login.dart';
-import 'package:my_final/pages/waiting.dart';
-import 'package:my_final/pages/activity.dart';
-import 'package:my_final/pages/apl01.dart';
+import 'package:my_final/pages/auth/login.dart';
+import 'package:my_final/pages/auth/waiting.dart';
+import 'package:my_final/pages/activity/activity.dart';
+import 'package:my_final/pages/profile.dart';
 
 class MyMaster extends StatefulWidget {
   const MyMaster({super.key});
@@ -20,9 +20,8 @@ class _MyMasterState extends State<MyMaster> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Home(),
-    // ActivityPage(),
-    // PostPage()
-    MyLogin()
+    ActivityPage(),
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -46,10 +45,10 @@ class _MyMasterState extends State<MyMaster> {
             icon: Icon(Icons.home),
             label: 'Beranda',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.widgets),
-          //   label: 'Alur',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.widgets),
+            label: 'Alur',
+          ),
            BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Akun',
