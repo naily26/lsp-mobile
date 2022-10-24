@@ -50,10 +50,13 @@ class _MyLoginState extends State<MyLogin> {
       if (response.statusCode == 200) {
         print(_data['user_id']);
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        postData(_data['user_id'], _data['id'], _data['name'], _data['nim'], _data['jurusan']['nama'], _data['prodi']['nama'], _data['user']['email'],
+         postData(_data['user_id'], _data['id'], _data['name'], _data['nim'], _data['jurusan']['nama'], _data['prodi']['nama'], _data['user']['email']);
+        if (_data['status'] == 'approve' && _data['nik'] != null ) {
+          postDataDiri(
         _data['no_telepon'], _data['alamat'], _data['kode_kabupaten'], _data['kode_provinsi'], _data['kode_pekerjaan'], _data['kode_pendidikan'],
         _data['jenis_kelamin'], _data['tempat_lahir'], _data['tanggal_lahir'],  _data['nik'], _data['pengajuan']['file_apl_01'], _data['pengajuan']['file_apl_02']
         ); 
+        }
         print('sukses');
         if(_data['status'] == 'approve') {
           if(_data['nik'] == null) {
@@ -94,8 +97,7 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 
-  postData(UserId, AsesiId, UserName, nim, jurusan, prodi, email, no_telepon, alamat, kabupaten, provinsi, pekerjaan, pendidikan, jk, tmpl , tgll, nik,
-            file_apl_01, file_apl_02 ) async {
+  postData(UserId, AsesiId, UserName, nim, jurusan, prodi, email ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('AsesiId', AsesiId);
     prefs.setInt('UserId', UserId);
@@ -104,6 +106,12 @@ class _MyLoginState extends State<MyLogin> {
     prefs.setString('prodi', prodi);
     prefs.setString('jurusan', jurusan);
     prefs.setString('email', email);
+  }
+
+  postDataDiri(no_telepon, alamat, kabupaten, provinsi, pekerjaan, pendidikan, jk, tmpl , tgll, nik,
+            file_apl_01, file_apl_02 ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    
     prefs.setString('no_telepon', no_telepon);
     prefs.setString('alamat', alamat);
     prefs.setString('kabupaten', kabupaten);
@@ -114,9 +122,9 @@ class _MyLoginState extends State<MyLogin> {
     prefs.setString('tmpl', tmpl);
     prefs.setString('tgll', tgll);
     prefs.setString('nik', nik);
-    // prefs.setString('file_apl_01', file_apl_01);
-    // prefs.setString('file_apl_02', file_apl_02);
   }
+
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

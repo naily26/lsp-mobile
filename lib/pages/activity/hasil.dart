@@ -3,6 +3,12 @@ import 'package:my_final/data/img.dart';
 import 'package:my_final/data/my_colors.dart';
 import 'package:my_final/widget/my_text.dart';
 
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+
 class HasilPage extends StatefulWidget {
   const HasilPage({super.key});
 
@@ -11,9 +17,64 @@ class HasilPage extends StatefulWidget {
 }
 
 class _HasilPageState extends State<HasilPage> {
+  var AsesiId;
+  var _data;
+  var nama_skema;
+  final String _tokenAuth = '';
+  var UserId;
+  String status_apl_02 = '';
+  var file_apl_02;
+  String tanggal_assesment = '';
+  String tuk = '';
+  String hasil = '';
+  String asesor = '';
+  String lokasi = '';
+
+  Future _getAllData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    nama_skema = prefs.getString('nama_skema');
+    UserId = prefs.getInt('UserId');
+    AsesiId = prefs.getInt('AsesiId');
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_pengajuan/' + AsesiId.toString());
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          _data = json.decode(response.body)['data'];
+        });
+        file_apl_02 = _data['file_apl_02'];
+        var status = _data['status_apl_02'].toString();
+        tanggal_assesment = _data['tanggal_assesment'].toString();
+        hasil = _data['status_skema'].toString();
+        asesor = _data['asesor']['name'].toString();
+        tuk = _data['tuk']['name'].toString();
+        lokasi = _data['tuk']['lokasi'].toString();
+      } else {
+        print('error');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error');
+    } on FormatException {
+      print('error');
+    }
+  }
+
+    @override
+  void initState() {
+    super.initState();
+    _getAllData().whenComplete(() {
+      setState(() {});
+    });
+  }
+
    @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text('Hasil Uji Kompetensi'),
@@ -104,15 +165,7 @@ class _HasilPageState extends State<HasilPage> {
                               children: <Widget>[
                                 Icon(Icons.book, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("Pemograman Mobile", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
-                              ],
-                            ),
-                            Container(height: 10),
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.event, color: MyColors.grey_40),
-                                Container(width: 10),
-                                Text("11-02-2022", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                Text(nama_skema.toString(), style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
                               ],
                             ),
                             Container(height: 10),
@@ -120,7 +173,36 @@ class _HasilPageState extends State<HasilPage> {
                               children: <Widget>[
                                 Icon(Icons.person, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("Sehun M.T", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                Text(asesor, style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                              ],
+                            ),
+                            Container(height: 10),
+                            Container(width: double.infinity, height: 1, color: MyColors.grey_20)
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(15),
+                        child: Text("Waktu dan Tempat", style: MyText.body2(context)!.copyWith(color: MyColors.grey_40)),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.event, color: MyColors.grey_40),
+                                Container(width: 10),
+                                Text(tanggal_assesment, style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                              ],
+                            ),
+                            Container(height: 10),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.place, color: MyColors.grey_40),
+                                Container(width: 10),
+                                Text(tuk, style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
                               ],
                             ),
                             Container(height: 10),
@@ -128,7 +210,7 @@ class _HasilPageState extends State<HasilPage> {
                               children: <Widget>[
                                 Icon(Icons.location_city, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("Gedung 3C", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                Text(lokasi, style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
                               ],
                             ),
                             Container(height: 10),
@@ -149,7 +231,7 @@ class _HasilPageState extends State<HasilPage> {
                               children: <Widget>[
                                 Icon(Icons.layers, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("Kompeten", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                Text(hasil, style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
                               ],
                             ),
                             Container(height: 10),

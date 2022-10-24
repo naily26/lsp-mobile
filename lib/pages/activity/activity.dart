@@ -28,6 +28,8 @@ class _ActivityPageState extends State<ActivityPage> {
   var file_apl_01;
   var file_apl_02;
   String apl_01 = '';
+  var tanggal_assesment;
+  var hasil;
 
   Future _getAllData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,6 +57,8 @@ class _ActivityPageState extends State<ActivityPage> {
          postData(_data['status_apl_01'], _data['surat_tugas'], _data['tanggal_assesment'], _data['status_apl_02'],  _data['berita_acara'], _data['sertifikat'], _data['status_skema'],
           _data['kompetensi']['nama_skema'], _data['file_apl_01'], _data['file_apl_02']);
           apl_01 = _data['status_apl_01'].toString();
+          tanggal_assesment = _data['tanggal_assesment'];
+          hasil = _data['status_skema'];
           //  print(_data);
       } else {
         print('error');
@@ -74,20 +78,19 @@ class _ActivityPageState extends State<ActivityPage> {
     prefs.setString('file_apl_01', file_apl_01);
     prefs.setString('status_apl_01', status_apl_01 );
     prefs.setString('file_apl_02', file_apl_02);
-    prefs.setString('surat_tugas', surat_tugas);
     prefs.setString('tanggal_assesment', tanggal_assesment);
-    prefs.setString('status_apl_02', status_apl_02);
     prefs.setString('berita_acara', berita_acara);
-    prefs.setString('sertifikat', sertifikat);
     prefs.setString('status_skema', status_skema);
+    prefs.setString('sertifikat', sertifikat);
+    
   }
 
-  void _showToastNotAllowed(BuildContext context) {
+  void _showToastNotAllowed(BuildContext context, String msg) {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
-        content: const Text(
-          'Silahkan menunggu persetujuan APL-01',
+        content: Text(
+          msg,
         ),
         action: SnackBarAction(
             label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
@@ -160,7 +163,7 @@ class _ActivityPageState extends State<ActivityPage> {
                           MaterialPageRoute(builder: (context) => const Apl02Page()),
                         );
                         } else {
-                          _showToastNotAllowed(context);
+                          _showToastNotAllowed(context, 'Silahkan menunggu persetujuan APL-01');
                         }
                         
                       },
@@ -188,10 +191,13 @@ class _ActivityPageState extends State<ActivityPage> {
                 Expanded(
                   child:GestureDetector(
                     onTap: () {
+                      tanggal_assesment != null ?
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const JadwalPage()),
-                        );
+                        )
+                        :
+                        _showToastNotAllowed(context, 'Jadwal belum ditentukan');
                       },
                     child: Container( padding: EdgeInsets.symmetric(vertical: 20),
                       width: double.infinity,
@@ -202,7 +208,10 @@ class _ActivityPageState extends State<ActivityPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.event, size: 35, color: Color.fromARGB(255, 14, 111, 16)),
+                          (tanggal_assesment != null ?
+                          Icon(Icons.event, size: 35,  color: Color.fromARGB(255, 14, 111, 16))
+                          : 
+                          Icon(Icons.event, size: 35,  color: Colors.grey)),
                           Container(height: 18),
                           Text("JADWAL", style: MyText.body1(context)!.copyWith(color: MyColors.grey_90)),
                         ],
@@ -238,10 +247,13 @@ class _ActivityPageState extends State<ActivityPage> {
                 Expanded(
                   child: GestureDetector(
                      onTap: () {
+                        hasil!= null ?
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const HasilPage()),
-                        );
+                        )
+                        :
+                        _showToastNotAllowed(context, 'Belum ada hasil uji kompetensi');
                       },
                     child: Container( padding: EdgeInsets.symmetric(vertical: 20),
                       width: double.infinity,
@@ -252,7 +264,10 @@ class _ActivityPageState extends State<ActivityPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.check_box, size: 35, color: Color.fromARGB(255, 14, 111, 16)),
+                          (hasil != null ?
+                          Icon(Icons.check_box, size: 35,  color: Color.fromARGB(255, 14, 111, 16))
+                          : 
+                          Icon(Icons.check_box, size: 35,  color: Colors.grey)),
                           Container(height: 18),
                           Text("HASIL", style: MyText.body1(context)!.copyWith(color: MyColors.grey_90)),
                         ],

@@ -54,17 +54,39 @@ class _Apl01PageState extends State<Apl01Page> {
   var file_apl_01;
   var nama_skema;
   String status_apl_01 = '';
+  var AsesiId;
+  var _data;
 
   Future _getAllData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    UserId = prefs.getInt('UserId');
-    file_apl_01 = prefs.getString('file_apl_01');
     nama_skema = prefs.getString('nama_skema');
-    var status = prefs.getString('status_apl_01');
-    getStatus(status.toString());
-    print(file_apl_01);
-    print(status);
+    UserId = prefs.getInt('UserId');
+    AsesiId = prefs.getInt('AsesiId');
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_pengajuan/' + AsesiId.toString());
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          _data = json.decode(response.body)['data'];
+        });
+        file_apl_01 = _data['file_apl_01'];
+        var status = _data['status_apl_01'].toString();
+        getStatus(status);
+      } else {
+        print('error');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error');
+    } on FormatException {
+      print('error');
+    }
   }
+
 
   Future getStatus(status) async {
     if(status == 'continue') {
@@ -82,6 +104,7 @@ class _Apl01PageState extends State<Apl01Page> {
   String _filename = '';
 
   Future _postFormData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       Map<String, String> requestBody = <String, String>{
         // 'title': _inputTitle.text,
@@ -105,6 +128,10 @@ class _Apl01PageState extends State<Apl01Page> {
 
       if (res.statusCode == 200) {
         print('sukses');
+        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  const Apl01Page()),
+                        );
       } else {
         print('error');
       }

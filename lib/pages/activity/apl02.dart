@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:my_final/pages/layout/SecondMaster.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
@@ -42,6 +43,7 @@ class _Apl02PageState extends State<Apl02Page> {
       SnackBar(
         content: const Text(
           'Template APL-02 gagal diunduh',
+          style: TextStyle(color: Colors.red),
         ),
         action: SnackBarAction(
             label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
@@ -49,21 +51,52 @@ class _Apl02PageState extends State<Apl02Page> {
     );
   }
 
-  
-
   var UserId;
   var file_apl_02;
   var nama_skema;
-  String status_apl_01 = '';
+  String status_apl_02 = '';
+  var AsesiId;
+  var _data;
 
   Future _getAllData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    UserId = prefs.getInt('UserId');
-    file_apl_02 = prefs.getString('file_apl_02');
     nama_skema = prefs.getString('nama_skema');
-    status_apl_01 = prefs.getString('status_apl_01').toString();
-    print(file_apl_02);
-    print(status_apl_01);
+    UserId = prefs.getInt('UserId');
+    AsesiId = prefs.getInt('AsesiId');
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_pengajuan/' + AsesiId.toString());
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          _data = json.decode(response.body)['data'];
+        });
+        file_apl_02 = _data['file_apl_02'];
+        var status = _data['status_apl_02'].toString();
+        getStatus(status);
+      } else {
+        print('error');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error');
+    } on FormatException {
+      print('error');
+    }
+  }
+
+
+  Future getStatus(status) async {
+    if(status == 'continue') {
+      status_apl_02 = 'Assessment dilanjutkan';
+    } else if( status == 'hold') {
+      status_apl_02 = 'Assessment tidak dilanjutkan';
+    } else {
+      status_apl_02 = 'Menunggu konfirmasi';
+    }
   }
 
   final String _tokenAuth = '';
@@ -72,6 +105,7 @@ class _Apl02PageState extends State<Apl02Page> {
   String _filename = '';
 
   Future _postFormData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       Map<String, String> requestBody = <String, String>{
         // 'title': _inputTitle.text,
@@ -95,6 +129,10 @@ class _Apl02PageState extends State<Apl02Page> {
 
       if (res.statusCode == 200) {
         print('sukses');
+        print(res.body);
+      //  setState(() {
+         _getAllData();
+      //  });
       } else {
         print('error');
       }
@@ -105,6 +143,11 @@ class _Apl02PageState extends State<Apl02Page> {
     } on FormatException {
       print('error');
     }
+  }
+
+  Future postData(apl_02) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('status_apl_02', apl_02);
   }
 
   void _onChangeFile() async {
@@ -138,6 +181,12 @@ class _Apl02PageState extends State<Apl02Page> {
     return new Scaffold(
       appBar: AppBar(
         title: const Text('APL-02'),
+        leading: IconButton(
+    onPressed: () {
+
+    },
+    icon: Icon(Icons.home),
+  ),
       ),
       body: Stack(
         children: <Widget>[
@@ -264,7 +313,7 @@ class _Apl02PageState extends State<Apl02Page> {
                                                   new BorderRadius.circular(
                                                       4))),
                                       onPressed: () {
-                                          _onChangeFile();
+                                        _onChangeFile();
                                       },
                                     ),
                                   ),
@@ -436,7 +485,7 @@ class _Apl02PageState extends State<Apl02Page> {
                               children: <Widget>[
                                 Icon(Icons.layers, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text( status_apl_01,
+                                Text( status_apl_02,
                                     style: MyText.body2(context)!
                                         .copyWith(color: MyColors.grey_60))
                               ],
