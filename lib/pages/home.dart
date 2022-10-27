@@ -4,9 +4,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-import 'package:my_final/models/dokumentasi.dart';
+import 'package:my_final/pages/view-pdf.dart';
 import 'package:my_final/models/slider.dart';
 import 'package:my_final/pages/skema.dart';
 import 'package:my_final/pages/tuk.dart';
@@ -19,21 +20,25 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _data = [];
+  var _data;
   final String _tokenAuth = '';
+  String linkAlurSertifikasi = '';
 
   // Future Get Data
   Future _getAllData() async {
     try {
-      var url = Uri.parse('https://lsp-api.000webhostapp.com/api/get_data_kampus');
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_kampus');
       var response = await http.get(
         url,
         headers: {'Authorization': 'Bearer ' + _tokenAuth},
       );
       if (response.statusCode == 200) {
         setState(() {
-          _data = json.decode(response.body)['result'];
+          _data = json.decode(response.body)['result'][0];
         });
+        // linkAlurSertifikasi = _getData();
+        print(_data['file_alur_sertifikasi']);
+        print('sukses');
       } else {
         print('error');
       }
@@ -47,17 +52,16 @@ class _HomeState extends State<Home> {
   }
 
 _getData() {
-  var uri =_data[0]['file_alur_Sertifikasi'];
+  var uri =_data['file_alur_Sertifikasi'];
   return uri;
 }
 
-final Uri _url = Uri.parse('https://flutter.dev');
- Future<void> _launchUrl() async {
-  if (!await launchUrl(_url)) {
-    throw 'Could not launch $_url';
+ @override
+  void initState() {
+     _getAllData();
+    super.initState();
+   
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -139,16 +143,12 @@ final Uri _url = Uri.parse('https://flutter.dev');
                                   ),
                                 ),
                                  GestureDetector(
-                                  //  onTap: () async {
-                                  //                         String url = _data[0]['file_alur_sertifikasi'];
-                                  //                         Uri myUri = Uri.parse(url);
-                                  //                         var urllaunchable = await launchUrl(myUri); //canLaunch is from url_launcher package
-                                  //                         if(urllaunchable){
-                                  //                             await launchUrl(myUri); //launch is from url_launcher package to launch URL
-                                  //                         }else{
-                                  //                           print("URL can't be launched.");
-                                  //                         }
-                                  //                       },
+                                  onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => PdfPage(link: _data['file_alur_sertifikasi'], title: 'Alur Sertifikasi',)),
+                                      );
+                                    },
                                    child: Container(
                                      width: ((MediaQuery.of(context).size.width)-30)/3,
                                      child: Column(

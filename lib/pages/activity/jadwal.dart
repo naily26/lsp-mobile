@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_final/data/img.dart';
 import 'package:my_final/data/my_colors.dart';
 import 'package:my_final/widget/my_text.dart';
+import 'package:my_final/pages/view-pdf.dart';
 
 import 'dart:convert';
 import 'dart:io';
@@ -24,6 +25,7 @@ class _JadwalPageState extends State<JadwalPage> {
   var UserId;
   String status_apl_02 = '';
   var file_apl_02;
+  var file_apl_01;
   String tanggal_assesment = '';
   String tuk = '';
   String asesor = '';
@@ -46,13 +48,14 @@ class _JadwalPageState extends State<JadwalPage> {
           _data = json.decode(response.body)['data'];
         });
         file_apl_02 = _data['file_apl_02'];
+        file_apl_01 = _data['file_apl_01'];
         var status = _data['status_apl_02'].toString();
         tanggal_assesment = _data['tanggal_assesment'].toString();
         asesor = _data['asesor']['name'].toString();
         PenanggungJawab = _data['tuk']['penanggung_jawab'].toString();
         tuk = _data['tuk']['name'].toString();
         lokasi = _data['tuk']['lokasi'].toString();
-
+        print(_data['file_apl_01']);
       } else {
         print('error');
       }
@@ -116,7 +119,24 @@ class _JadwalPageState extends State<JadwalPage> {
                               children: <Widget>[
                                 Icon(Icons.text_snippet_outlined, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("dokumen-apl-01.pdf", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                 GestureDetector(
+                                        onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => PdfPage(link: file_apl_01, title: 'File Apl-01',)),
+                                      );
+                                    },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(color: Color.fromARGB(255, 13, 71, 161))
+                                                  )),
+                                          child: Text("dokumen-apl-01.pdf",
+                                              style: MyText.body2(context)!
+                                                  .copyWith(
+                                                      color: Color.fromARGB(255, 13, 71, 161))),
+                                        ),
+                                      )
                               ],
                             ),
                             Container(height: 10),
@@ -124,7 +144,24 @@ class _JadwalPageState extends State<JadwalPage> {
                               children: <Widget>[
                                 Icon(Icons.text_snippet_outlined, color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("dokumen-apl-02.pdf", style: MyText.body2(context)!.copyWith(color: MyColors.grey_60))
+                                 GestureDetector(
+                                        onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => PdfPage(link: file_apl_02, title: 'File Apl-02',)),
+                                      );
+                                    },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(color: Color.fromARGB(255, 13, 71, 161))
+                                                  )),
+                                          child: Text("dokumen-apl-02.pdf",
+                                              style: MyText.body2(context)!
+                                                  .copyWith(
+                                                      color: Color.fromARGB(255, 13, 71, 161))),
+                                        ),
+                                      )
                               ],
                             ),
                             Container(height: 10),

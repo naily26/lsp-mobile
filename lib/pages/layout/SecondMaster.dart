@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:my_final/pages/home.dart';
 import 'package:my_final/pages/skema.dart';
-import 'package:my_final/pages/blank.dart';
+import 'package:my_final/pages/view-pdf.dart';
 import 'package:my_final/pages/auth/login.dart';
 import 'package:my_final/pages/auth/waiting.dart';
 import 'package:my_final/pages/activity/activity.dart';
 import 'package:my_final/pages/profile.dart';
 
 class MyMaster extends StatefulWidget {
-  const MyMaster({super.key});
+  final int indexTab;
+  const MyMaster({Key? key, required this.indexTab}) : super(key: key);
 
   @override
   State<MyMaster> createState() => _MyMasterState();
@@ -33,6 +34,7 @@ class _MyMasterState extends State<MyMaster> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.indexTab;
   }
 
   @override

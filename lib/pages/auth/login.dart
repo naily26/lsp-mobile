@@ -64,7 +64,7 @@ class _MyLoginState extends State<MyLogin> {
             MaterialPageRoute(builder: (context) => ValidasiApprove()));
           } else {
             Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MyMaster()));
+            MaterialPageRoute(builder: (context) => MyMaster(indexTab: 1)));
           }
         } else if(_data['status'] == 'decline'){
           Navigator.push(context,

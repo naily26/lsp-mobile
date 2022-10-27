@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:my_final/pages/layout/SecondMaster.dart';
+import 'package:my_final/pages/view-pdf.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
@@ -23,7 +25,6 @@ class Apl01Page extends StatefulWidget {
 
 class _Apl01PageState extends State<Apl01Page> {
   String fileurl = "https://fluttercampus.com/sample.pdf";
-  
 
   void _showToast(BuildContext context) {
     final scaffold = ScaffoldMessenger.of(context);
@@ -63,7 +64,9 @@ class _Apl01PageState extends State<Apl01Page> {
     UserId = prefs.getInt('UserId');
     AsesiId = prefs.getInt('AsesiId');
     try {
-      var url = Uri.parse('https://lsp.intermediatech.id/api/get_data_pengajuan/' + AsesiId.toString());
+      var url = Uri.parse(
+          'https://lsp.intermediatech.id/api/get_data_pengajuan/' +
+              AsesiId.toString());
       var response = await http.get(
         url,
         headers: {'Authorization': 'Bearer ' + _tokenAuth},
@@ -87,11 +90,10 @@ class _Apl01PageState extends State<Apl01Page> {
     }
   }
 
-
   Future getStatus(status) async {
-    if(status == 'continue') {
+    if (status == 'continue') {
       status_apl_01 = 'Assessment dilanjutkan';
-    } else if( status == 'hold') {
+    } else if (status == 'hold') {
       status_apl_01 = 'Assessment tidak dilanjutkan';
     } else {
       status_apl_01 = 'Menunggu konfirmasi';
@@ -129,9 +131,9 @@ class _Apl01PageState extends State<Apl01Page> {
       if (res.statusCode == 200) {
         print('sukses');
         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  const Apl01Page()),
-                        );
+          context,
+          MaterialPageRoute(builder: (context) => const Apl01Page()),
+        );
       } else {
         print('error');
       }
@@ -180,6 +182,17 @@ class _Apl01PageState extends State<Apl01Page> {
     return new Scaffold(
       appBar: AppBar(
         title: const Text('APL-01'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyMaster(
+                          indexTab: 1,
+                        )));
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       body: Stack(
         children: <Widget>[
@@ -315,8 +328,8 @@ class _Apl01PageState extends State<Apl01Page> {
                             ),
                             (_filename != ""
                                 ? Form(
-                                  key: _formKey,
-                                  child: Column(
+                                    key: _formKey,
+                                    child: Column(
                                       children: [
                                         SizedBox(
                                           height: 10,
@@ -330,8 +343,8 @@ class _Apl01PageState extends State<Apl01Page> {
                                               child: Text("Dokumen",
                                                   style: MyText.body2(context)!
                                                       .copyWith(
-                                                          color:
-                                                              MyColors.grey_40)),
+                                                          color: MyColors
+                                                              .grey_40)),
                                             ),
                                             Container(
                                               padding: EdgeInsets.symmetric(
@@ -369,8 +382,8 @@ class _Apl01PageState extends State<Apl01Page> {
                                               height: 28,
                                               child: ElevatedButton(
                                                 child: Text('Simpan',
-                                                    style:
-                                                        TextStyle(fontSize: 12)),
+                                                    style: TextStyle(
+                                                        fontSize: 12)),
                                                 style: ElevatedButton.styleFrom(
                                                     primary: Colors.blue[900],
                                                     shape: RoundedRectangleBorder(
@@ -389,109 +402,128 @@ class _Apl01PageState extends State<Apl01Page> {
                                         ),
                                       ],
                                     ),
-                                )
+                                  )
                                 : Container()),
                           ],
                         ),
                       )),
                 ),
                 Container(height: 8),
-                (file_apl_01 != null) ?
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(1)),
-                  color: Colors.white,
-                  elevation: 2,
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(15),
-                        child: Text("Dokumen",
-                            style: MyText.body2(context)!
-                                .copyWith(color: MyColors.grey_40)),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                (file_apl_01 != null)
+                    ? Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(1)),
+                        color: Colors.white,
+                        elevation: 2,
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: Column(
                           children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.text_snippet_outlined,
-                                    color: MyColors.grey_40),
-                                Container(width: 10),
-                                Text("dokumen-apl-01.pdf",
-                                    style: MyText.body2(context)!
-                                        .copyWith(color: MyColors.grey_60))
-                              ],
-                            ),
-                            Container(height: 10),
                             Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: MyColors.grey_20)
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(15),
-                        child: Text("Info",
-                            style: MyText.body2(context)!
-                                .copyWith(color: MyColors.grey_40)),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.event, color: MyColors.grey_40),
-                                Container(width: 10),
-                                Text(nama_skema.toString(),
-                                    style: MyText.body2(context)!
-                                        .copyWith(color: MyColors.grey_60))
-                              ],
+                              width: double.infinity,
+                              padding: EdgeInsets.all(15),
+                              child: Text("Dokumen",
+                                  style: MyText.body2(context)!
+                                      .copyWith(color: MyColors.grey_40)),
                             ),
-                            Container(height: 10),
                             Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: MyColors.grey_20)
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(15),
-                        child: Text("Status",
-                            style: MyText.body2(context)!
-                                .copyWith(color: MyColors.grey_40)),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.layers, color: MyColors.grey_40),
-                                Container(width: 10),
-                                Text( status_apl_01,
-                                    style: MyText.body2(context)!
-                                        .copyWith(color: MyColors.grey_60))
-                              ],
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(Icons.text_snippet_outlined,
+                                          color: MyColors.grey_40),
+                                      Container(width: 10),
+                                      GestureDetector(
+                                        onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => PdfPage(link: file_apl_01, title: 'File Apl-01',)),
+                                      );
+                                    },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(color: Color.fromARGB(255, 13, 71, 161))
+                                                  )),
+                                          child: Text("dokumen-apl-01.pdf",
+                                              style: MyText.body2(context)!
+                                                  .copyWith(
+                                                      color: Color.fromARGB(255, 13, 71, 161))),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Container(height: 10),
+                                  Container(
+                                      width: double.infinity,
+                                      height: 1,
+                                      color: MyColors.grey_20)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(15),
+                              child: Text("Info",
+                                  style: MyText.body2(context)!
+                                      .copyWith(color: MyColors.grey_40)),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(Icons.event,
+                                          color: MyColors.grey_40),
+                                      Container(width: 10),
+                                      Text(nama_skema.toString(),
+                                          style: MyText.body2(context)!
+                                              .copyWith(
+                                                  color: MyColors.grey_60))
+                                    ],
+                                  ),
+                                  Container(height: 10),
+                                  Container(
+                                      width: double.infinity,
+                                      height: 1,
+                                      color: MyColors.grey_20)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(15),
+                              child: Text("Status",
+                                  style: MyText.body2(context)!
+                                      .copyWith(color: MyColors.grey_40)),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(Icons.layers,
+                                          color: MyColors.grey_40),
+                                      Container(width: 10),
+                                      Text(status_apl_01,
+                                          style: MyText.body2(context)!
+                                              .copyWith(
+                                                  color: MyColors.grey_60))
+                                    ],
+                                  ),
+                                  Container(height: 10),
+                                ],
+                              ),
                             ),
                             Container(height: 10),
                           ],
                         ),
-                      ),
-                      Container(height: 10),
-                    ],
-                  ),
-                )
-                : Container()
+                      )
+                    : Container()
               ],
             ),
           )

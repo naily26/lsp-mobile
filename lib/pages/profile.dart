@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_final/data/my_colors.dart';
 import 'package:my_final/widget/my_text.dart';
 import 'package:my_final/pages/layout/master.dart';
+import 'package:my_final/pages/edit-profile.dart';
+import 'package:my_final/pages/auth/edit-password.dart';
+
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -62,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MyMaster()),
+                                builder: (context) => const MyMaster(indexTab: 1,)),
                           );
   }
 
@@ -97,9 +101,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
                     alignment: Alignment.bottomLeft,
                     constraints: BoxConstraints.expand(height: 50),
-                    child: Text(UserName.toString(),
-                        style: MyText.headline(context)!
-                            .copyWith(color: Colors.white)),
+                    child: Row(
+                      children: [
+                        Text(UserName.toString(),
+                            style: MyText.headline(context)!
+                                .copyWith(color: Colors.white)),
+                        Container(width: 5,),
+                        GestureDetector(onTap: () {
+                           Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EditProfilePage()));
+                        }, child: Icon(Icons.edit, color: Colors.white,))
+                      ],
+                    ),
                   ),
                   preferredSize: Size.fromHeight(50)),
               automaticallyImplyLeading: false,
@@ -108,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   onSelected: (String value) {},
                   itemBuilder: (context) => [
                     PopupMenuItem(
-                      value: "Settings",
+                      // value: "Settings",
                       child: GestureDetector(
                         child: Text("Log Out"),
                         onTap: () {
@@ -485,12 +498,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     InkWell(
                       highlightColor: Colors.grey.withOpacity(0.1),
                       splashColor: Colors.grey.withOpacity(0.1),
-                      onTap: () => () {},
+                      onTap: () {
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EditPasswordPage()),
+                          );
+                      },
                       child: Container(
                         width: double.infinity,
                         padding:
                             EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                        child: Text("Ask a Question",
+                        child: Text("Ganti Kata Sandi",
                             style: MyText.medium(context)
                                 .copyWith(color: MyColors.grey_80)),
                       ),

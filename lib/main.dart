@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_final/pages/blank.dart';
+import 'package:my_final/pages/view-pdf.dart';
 import 'package:my_final/pages/auth/login.dart';
 import 'package:my_final/pages/splash.dart';
 import 'package:my_final/pages/skema.dart';

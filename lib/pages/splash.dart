@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_final/pages/blank.dart';
+import 'package:my_final/pages/view-pdf.dart';
 import 'package:my_final/pages/layout/master.dart';
 
 
@@ -46,7 +46,7 @@ class _LogoAppState extends State<LogoApp> with SingleTickerProviderStateMixin {
         if (status == AnimationStatus.completed) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (BuildContext context) => MyMaster(),
+              builder: (BuildContext context) => MyMaster(indexTab: 0,),
             ),
           );
         }

@@ -7,6 +7,7 @@ import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:my_final/pages/layout/SecondMaster.dart';
+import 'package:my_final/pages/view-pdf.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
@@ -183,9 +184,10 @@ class _Apl02PageState extends State<Apl02Page> {
         title: const Text('APL-02'),
         leading: IconButton(
     onPressed: () {
-
+       Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MyMaster(indexTab: 1,)));
     },
-    icon: Icon(Icons.home),
+    icon: Icon(Icons.arrow_back),
   ),
       ),
       body: Stack(
@@ -429,9 +431,24 @@ class _Apl02PageState extends State<Apl02Page> {
                                 Icon(Icons.text_snippet_outlined,
                                     color: MyColors.grey_40),
                                 Container(width: 10),
-                                Text("dokumen-apl-02.pdf",
-                                    style: MyText.body2(context)!
-                                        .copyWith(color: MyColors.grey_60))
+                                GestureDetector(
+                                        onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => PdfPage(link: file_apl_02, title: 'File Apl-02',)),
+                                      );
+                                    },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(color: Color.fromARGB(255, 13, 71, 161))
+                                                  )),
+                                          child: Text("dokumen-apl-02.pdf",
+                                              style: MyText.body2(context)!
+                                                  .copyWith(
+                                                      color: Color.fromARGB(255, 13, 71, 161))),
+                                        ),
+                                      )
                               ],
                             ),
                             Container(height: 10),

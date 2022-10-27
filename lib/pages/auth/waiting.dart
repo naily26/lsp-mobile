@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_final/pages/layout/master.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 class Validasi extends StatefulWidget {
   const Validasi({super.key});
@@ -9,6 +11,16 @@ class Validasi extends StatefulWidget {
 }
 
 class _ValidasiState extends State<Validasi> {
+  LogOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    return Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyMaster(indexTab: 1,)),
+                          );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -44,19 +56,6 @@ class _ValidasiState extends State<Validasi> {
                     fontSize: 16),
                   ),
                 ),
-                // Container(
-                //   height: 40,
-                //   // width: (MediaQuery.of(context).size.width)-100,
-                //   child: ElevatedButton(
-                //     child: Text('Log Out', ),
-                //     style: ElevatedButton.styleFrom(
-                //       primary: Color(0xFFD11919),
-                //       shape: RoundedRectangleBorder(
-                //                     borderRadius: new BorderRadius.circular(100))
-                //     ),
-                //     onPressed: () {},
-                //   ),
-                // ),
                 GestureDetector(
                   child: Container(
                     height: 40,
@@ -75,10 +74,7 @@ class _ValidasiState extends State<Validasi> {
                         ),
                   ),
                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const MyMaster()),
-                                    );
+                                    LogOut();
                                   },
                 ),
               ],
