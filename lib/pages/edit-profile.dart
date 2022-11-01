@@ -24,7 +24,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  List _data = [];
+  var _data ;
+  var _message;
   List _dataUser = [];
   final String _tokenAuth = '';
   late String _val;
@@ -50,7 +51,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserId = prefs.getInt('UserId');
     try {
-      var url = Uri.parse('https://lsp.intermediatech.id/api/complete-registration/'  + UserId.toString());
+      var url = Uri.parse('https://lsp.intermediatech.id/api/edit_profile/'  + UserId.toString());
       var response = await http.post(url,
           headers: {'Authorization': 'Bearer ' + _tokenAuth},
           body: {
@@ -64,16 +65,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
             'tanggal_lahir': _inputTanggaLahir.text,
             'no_telepon': _inputNoTelepon.text,
             'tempat_lahir': _inputTempatLahir.text,
-            'password': _inputPassword.text,
+            // 'password': _inputPassword.text,
             'email': _inputEmail.text
             }
         );
+       setState(() {
+          _data = json.decode(response.body)['data'];
+          // _message = json.decode(response.body)['message'];
+      });
       if (response.statusCode == 200) {
+         postData(_data['user_id'], _data['id'], _data['name'], _data['nim'], _data['user']['email']);
+         postDataDiri(
+        _data['no_telepon'], _data['alamat'], _data['kode_kabupaten'], _data['kode_provinsi'], _data['kode_pekerjaan'], _data['kode_pendidikan'],
+        _data['jenis_kelamin'], _data['tempat_lahir'], _data['tanggal_lahir'],  _data['nik'], _data['pengajuan']['file_apl_01'], _data['pengajuan']['file_apl_02']
+        ); 
+
         print('sukses');
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => MyMaster(indexTab: 2)));
+            print(_data);
       } else {
         print('error1');
+        _message = json.decode(response.body)['message'];
+        _showToast(_message, context);
       }
     } on SocketException {
       print('no internet');
@@ -84,8 +98,45 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  postData(UserId, AsesiId, UserName, nim, email ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('AsesiId', AsesiId);
+    prefs.setInt('UserId', UserId);
+    prefs.setString('UserName', UserName);
+    prefs.setString('nim', nim);
+    prefs.setString('prodi', prodi);
+    prefs.setString('jurusan', jurusan);
+    prefs.setString('email', email);
+  }
+
+   postDataDiri(no_telepon, alamat, kabupaten, provinsi, pekerjaan, pendidikan, jk, tmpl , tgll, nik,
+            file_apl_01, file_apl_02 ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    
+    prefs.setString('no_telepon', no_telepon);
+    prefs.setString('alamat', alamat);
+    prefs.setString('kabupaten', kabupaten);
+    prefs.setString('provinsi', provinsi);
+    prefs.setString('pekerjaan', pekerjaan);
+    prefs.setString('pendidikan', pendidikan);
+    prefs.setString('jk', jk);
+    prefs.setString('tmpl', tmpl);
+    prefs.setString('tgll', tgll);
+    prefs.setString('nik', nik);
+  }
+
+  void _showToast(String mesg, BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(mesg),
+        action: SnackBarAction(label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
   var UserId;
-  late String UserName;
+  String UserName = '';
   var email;
   var nim;
   var jurusan;
@@ -547,30 +598,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 ),
                               ),
                               Container(height: 10),
-                              TextFormField(
-                                controller: _inputPassword,
-                                // validator: (value) {
-                                //   if (value!.isEmpty) {
-                                //     return 'Password tidak boleh kosong';
-                                //   }
-                                //   return null;
-                                // },
-                                keyboardType: TextInputType.text,
-                                style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                  labelText: "Password",
-                                  labelStyle:
-                                      TextStyle(color: Colors.blueGrey[400]),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blueGrey[400]!, width: 1),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blueGrey[400]!, width: 2),
-                                  ),
-                                ),
-                              ),
+                              // TextFormField(
+                              //   controller: _inputPassword,
+                              //   // validator: (value) {
+                              //   //   if (value!.isEmpty) {
+                              //   //     return 'Password tidak boleh kosong';
+                              //   //   }
+                              //   //   return null;
+                              //   // },
+                              //   keyboardType: TextInputType.text,
+                              //   style: TextStyle(color: Colors.black),
+                              //   decoration: InputDecoration(
+                              //     labelText: "Password",
+                              //     labelStyle:
+                              //         TextStyle(color: Colors.blueGrey[400]),
+                              //     enabledBorder: UnderlineInputBorder(
+                              //       borderSide: BorderSide(
+                              //           color: Colors.blueGrey[400]!, width: 1),
+                              //     ),
+                              //     focusedBorder: UnderlineInputBorder(
+                              //       borderSide: BorderSide(
+                              //           color: Colors.blueGrey[400]!, width: 2),
+                              //     ),
+                              //   ),
+                              // ),
                               Container(height: 25),
                               
                 ],

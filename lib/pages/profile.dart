@@ -109,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(width: 5,),
                         GestureDetector(onTap: () {
                            Navigator.push(context,
-            MaterialPageRoute(builder: (context) => EditProfilePage()));
+            MaterialPageRoute(builder: (context) => const EditProfilePage()));
                         }, child: Icon(Icons.edit, color: Colors.white,))
                       ],
                     ),

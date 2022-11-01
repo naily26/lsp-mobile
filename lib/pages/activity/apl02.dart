@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:my_final/pages/layout/SecondMaster.dart';
 import 'package:my_final/pages/view-pdf.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
@@ -228,97 +229,97 @@ class _Apl02PageState extends State<Apl02Page> {
                             Padding(
                               padding: const EdgeInsets.only(top: 6),
                               child: Row(
-                                children: [
-                                  Container(
-                                    height: 28,
-                                    child: ElevatedButton(
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.file_download_outlined,
-                                            size: 18,
-                                          ),
-                                          Text(' Unduh template Apl-02',
-                                              style: TextStyle(fontSize: 12)),
-                                        ],
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.blue[900],
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  new BorderRadius.circular(
-                                                      4))),
-                                      onPressed: () async {
-                                        Map<Permission, PermissionStatus>
-                                            statuses = await [
-                                          Permission.storage,
-                                          //add more permission to request here.
-                                        ].request();
-                                        if (statuses[Permission.storage]!
-                                            .isGranted) {
-                                          var dir = await DownloadsPathProvider
-                                              .downloadsDirectory;
-                                          if (dir != null) {
-                                            String savename = "apl-02.pdf";
-                                            String savePath =
-                                                dir.path + "/$savename";
-                                            print(savePath);
-                                            //output:  /storage/emulated/0/Download/banner.png
+                                children: [ 
+                                    Container(
+                                      height: 28,
+                                      child: ElevatedButton(
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.file_download_outlined,
+                                              size: 18,
+                                            ),
+                                            AutoSizeText(' Unduh template',
+                                                style: TextStyle(fontSize: 12)),
+                                          ],
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.blue[900],
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        4))),
+                                        onPressed: () async {
+                                          Map<Permission, PermissionStatus>
+                                              statuses = await [
+                                            Permission.storage,
+                                            //add more permission to request here.
+                                          ].request();
+                                          if (statuses[Permission.storage]!
+                                              .isGranted) {
+                                            var dir = await DownloadsPathProvider
+                                                .downloadsDirectory;
+                                            if (dir != null) {
+                                              String savename = "apl-02.pdf";
+                                              String savePath =
+                                                  dir.path + "/$savename";
+                                              print(savePath);
+                                              //output:  /storage/emulated/0/Download/banner.png
 
-                                            try {
-                                              await Dio()
-                                                  .download(fileurl, savePath,
-                                                      onReceiveProgress:
-                                                          (received, total) {
-                                                if (total != -1) {
-                                                  print((received / total * 100)
-                                                          .toStringAsFixed(0) +
-                                                      "%");
-                                                  //you can build progressbar feature too
-                                                }
-                                              });
-                                              print(
-                                                  "File is saved to download folder.");
-                                              return _showToast(context);
-                                            } on DioError catch (e) {
-                                              print(e.message);
+                                              try {
+                                                await Dio()
+                                                    .download(fileurl, savePath,
+                                                        onReceiveProgress:
+                                                            (received, total) {
+                                                  if (total != -1) {
+                                                    print((received / total * 100)
+                                                            .toStringAsFixed(0) +
+                                                        "%");
+                                                    //you can build progressbar feature too
+                                                  }
+                                                });
+                                                print(
+                                                    "File is saved to download folder.");
+                                                return _showToast(context);
+                                              } on DioError catch (e) {
+                                                print(e.message);
+                                              }
                                             }
+                                          } else {
+                                            print(
+                                                "No permission to read and write.");
+                                            return _showToastFailed(context);
                                           }
-                                        } else {
-                                          print(
-                                              "No permission to read and write.");
-                                          return _showToastFailed(context);
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 15,
-                                  ),
-                                  Container(
-                                    height: 28,
-                                    child: ElevatedButton(
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.file_upload_outlined,
-                                            size: 18,
-                                          ),
-                                          Text(' Unggah dokumen Apl-02',
-                                              style: TextStyle(fontSize: 12)),
-                                        ],
+                                        },
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.blue[900],
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  new BorderRadius.circular(
-                                                      4))),
-                                      onPressed: () {
-                                        _onChangeFile();
-                                      },
                                     ),
-                                  ),
+                                  Container(width: 5,),
+                                  
+                                    Container(
+                                      height: 28,
+                                      child: ElevatedButton(
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.file_upload_outlined,
+                                              size: 18,
+                                            ),
+                                            AutoSizeText(' Unggah dokumen',
+                                                style: TextStyle(fontSize: 12)),
+                                          ],
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.blue[900],
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        4))),
+                                        onPressed: () {
+                                          _onChangeFile();
+                                        },
+                                      ),
+                                    ),
+                                 
                                 ],
                               ),
                             ),

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:my_final/pages/layout/SecondMaster.dart';
 import 'package:my_final/pages/view-pdf.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
@@ -242,7 +243,7 @@ class _Apl01PageState extends State<Apl01Page> {
                                             Icons.file_download_outlined,
                                             size: 18,
                                           ),
-                                          Text(' Unduh template Apl-01',
+                                          AutoSizeText(' Unduh template',
                                               style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
@@ -297,7 +298,7 @@ class _Apl01PageState extends State<Apl01Page> {
                                     ),
                                   ),
                                   Container(
-                                    width: 15,
+                                    width: 5,
                                   ),
                                   Container(
                                     height: 28,
@@ -308,7 +309,7 @@ class _Apl01PageState extends State<Apl01Page> {
                                             Icons.file_upload_outlined,
                                             size: 18,
                                           ),
-                                          Text(' Unggah dokumen Apl-01',
+                                          AutoSizeText(' Unggah dokumen',
                                               style: TextStyle(fontSize: 12)),
                                         ],
                                       ),

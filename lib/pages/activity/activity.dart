@@ -6,6 +6,9 @@ import 'package:my_final/pages/upload-apl01.dart';
 import 'package:my_final/pages/activity/apl02.dart';
 import 'package:my_final/pages/activity/jadwal.dart';
 import 'package:my_final/pages/activity/hasil.dart';
+import 'package:my_final/pages/view-pdf.dart';
+
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -21,6 +24,7 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage> {
   var _data;
+  var _dataMateri;
   final String _tokenAuth = '';
 
   var UserId;
@@ -30,6 +34,7 @@ class _ActivityPageState extends State<ActivityPage> {
   String apl_01 = '';
   var tanggal_assesment;
   var hasil;
+  String linkMateri = '';
 
   Future _getAllData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,16 +64,46 @@ class _ActivityPageState extends State<ActivityPage> {
           apl_01 = _data['status_apl_01'].toString();
           tanggal_assesment = _data['tanggal_assesment'];
           hasil = _data['status_skema'];
-          //  print(_data);
+          _getDataMateri(_data['kompetensi']['id'].toString());
       } else {
-        print('error');
+        print('error1');
       }
     } on SocketException {
       print('no internet');
     } on HttpException {
-      print('error');
+      print('error2');
     } on FormatException {
-      print('error');
+      print('error3');
+    }
+  }
+
+  Future _getDataMateri(String kompetensiId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserId = prefs.getInt('UserId');
+    AsesiId = prefs.getInt('AsesiId');
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_detail_kompetensi/' + kompetensiId);
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          _dataMateri = json.decode(response.body)['result'];
+        });
+        linkMateri = _dataMateri['materi']['dokumen_materi'].toString();
+        print(linkMateri);
+        print('sukses');
+          
+      } else {
+        print('error1');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error2');
+    } on FormatException {
+      print('error3');
     }
   }
 
@@ -132,6 +167,33 @@ class _ActivityPageState extends State<ActivityPage> {
                     onTap: () {
                         Navigator.push(
                           context,
+                          MaterialPageRoute(builder: (context) =>  PdfPage(link: linkMateri, title: 'Materi',)),
+                        );
+                        
+                      },
+                    child: Container( padding: EdgeInsets.symmetric(vertical: 20),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: MyColors.grey_5,
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.my_library_books_rounded, size: 35, color: Color.fromARGB(255, 14, 111, 16)),
+                          Container(height: 18),
+                          Text("MATERI", style: MyText.body1(context)!.copyWith(color: MyColors.grey_90)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(width: 6),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                        Navigator.push(
+                          context,
                           MaterialPageRoute(builder: (context) =>  const Apl01Page()),
                         );
                         
@@ -187,7 +249,13 @@ class _ActivityPageState extends State<ActivityPage> {
                     ),
                   ),
                 ),
-                Container(width: 6),
+                Container(width: 15),
+              ],
+            ),
+            Container(height: 6),
+            Row(
+              children: <Widget>[
+                Container(width: 15),
                 Expanded(
                   child:GestureDetector(
                     onTap: () {
@@ -216,30 +284,6 @@ class _ActivityPageState extends State<ActivityPage> {
                           Text("JADWAL", style: MyText.body1(context)!.copyWith(color: MyColors.grey_90)),
                         ],
                       ),
-                    ),
-                  ),
-                ),
-                Container(width: 15),
-              ],
-            ),
-            Container(height: 6),
-            Row(
-              children: <Widget>[
-                Container(width: 15),
-                Expanded(
-                  child: Container( padding: EdgeInsets.symmetric(vertical: 20),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: MyColors.grey_5,
-                      borderRadius: BorderRadius.all(Radius.circular(4)),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.my_library_books_rounded, size: 35, color: Color.fromARGB(255, 14, 111, 16)),
-                        Container(height: 18),
-                        Text("MATERI", style: MyText.body1(context)!.copyWith(color: MyColors.grey_90)),
-                      ],
                     ),
                   ),
                 ),
@@ -278,7 +322,6 @@ class _ActivityPageState extends State<ActivityPage> {
                 Container(width: 15),
               ],
             ),
-            
             ],
         ),
       ),

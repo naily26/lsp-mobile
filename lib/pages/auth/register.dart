@@ -212,7 +212,7 @@ class _RegiterPageState extends State<RegiterPage> {
                           items: _data.map((items) {
                               return DropdownMenuItem(
                                 value: items['id_prodi'].toString(),
-                                child: AutoSizeText(items['nama_jurusan']+' - '+items['nama_prodi'], style: TextStyle(fontSize: 15), maxLines: 1,),
+                                child: AutoSizeText(items['nama_jurusan']+' - '+items['nama_prodi'], style: TextStyle(fontSize: 15), maxLines: 2,),
                               );
                             }).toList(),
                             onChanged: (String? newValue) {

@@ -67,7 +67,7 @@ _getData() {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LSP'),
+        title: const Text('Beranda'),
         automaticallyImplyLeading: false,
       ),
       body: Container(

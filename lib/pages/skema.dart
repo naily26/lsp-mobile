@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
@@ -83,7 +83,17 @@ class _SkemaState extends State<Skema> {
                           fontSize: 18),
                         ),
                         Text(
-                          _data[index]['end'],
+                           _data[index]['start'],
+                          style: TextStyle(color: Color.fromARGB(255, 62, 62, 62), fontWeight: FontWeight.w400,
+                          fontSize: 14),
+                        ),
+                        // Text(
+                        //   'sampai:' + _data[index]['end'],
+                        //   style: TextStyle(color: Color.fromARGB(255, 62, 62, 62), fontWeight: FontWeight.w400,
+                        //   fontSize: 14),
+                        // ),
+                        Text(
+                          'deskripsi: ' + _data[index]['deskripsi'],
                           style: TextStyle(color: Color.fromARGB(255, 62, 62, 62), fontWeight: FontWeight.w400,
                           fontSize: 14),
                         )
