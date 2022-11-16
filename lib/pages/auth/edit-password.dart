@@ -73,6 +73,13 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
     );
   }
 
+  bool passwordHidden = true;
+  void _showPassword() {
+    setState(() {
+      passwordHidden = !passwordHidden;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,8 +141,16 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                 },
                 keyboardType: TextInputType.text,
                 style: TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Kata Sandi Lama",
+                  suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _showPassword();
+                                  },
+                                  icon: (passwordHidden)
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off),
+                                ),
                   labelStyle: TextStyle(color: MyColors.grey_40),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: MyColors.grey_40, width: 1),
@@ -161,8 +176,16 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                 },
                 keyboardType: TextInputType.text,
                 style: TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Kata Sandi Baru",
+                  suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _showPassword();
+                                  },
+                                  icon: (passwordHidden)
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off),
+                                ),
                   labelStyle: TextStyle(color: MyColors.grey_40),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: MyColors.grey_40, width: 1),
@@ -188,8 +211,16 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                 },
                 keyboardType: TextInputType.text,
                 style: TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Konfirmasi kata sandi lama",
+                  suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _showPassword();
+                                  },
+                                  icon: (passwordHidden)
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off),
+                                ),
                   labelStyle: TextStyle(color: MyColors.grey_40),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: MyColors.grey_40, width: 1),

@@ -25,7 +25,6 @@ class Apl01Page extends StatefulWidget {
 }
 
 class _Apl01PageState extends State<Apl01Page> {
-  String fileurl = "https://fluttercampus.com/sample.pdf";
 
   void _showToast(BuildContext context) {
     final scaffold = ScaffoldMessenger.of(context);
@@ -58,12 +57,14 @@ class _Apl01PageState extends State<Apl01Page> {
   String status_apl_01 = '';
   var AsesiId;
   var _data;
+  String fileurl = '';
 
   Future _getAllData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     nama_skema = prefs.getString('nama_skema');
     UserId = prefs.getInt('UserId');
     AsesiId = prefs.getInt('AsesiId');
+    fileurl = prefs.getString('tmp_apl_01').toString();
     try {
       var url = Uri.parse(
           'https://lsp.intermediatech.id/api/get_data_pengajuan/' +
@@ -264,7 +265,7 @@ class _Apl01PageState extends State<Apl01Page> {
                                           var dir = await DownloadsPathProvider
                                               .downloadsDirectory;
                                           if (dir != null) {
-                                            String savename = "apl-01.pdf";
+                                            String savename = "template-apl-01.pdf";
                                             String savePath =
                                                 dir.path + "/$savename";
                                             print(savePath);

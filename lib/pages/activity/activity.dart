@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:my_final/data/my_colors.dart';
 import 'package:my_final/widget/my_text.dart';
@@ -7,6 +9,7 @@ import 'package:my_final/pages/activity/apl02.dart';
 import 'package:my_final/pages/activity/jadwal.dart';
 import 'package:my_final/pages/activity/hasil.dart';
 import 'package:my_final/pages/view-pdf.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +17,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -35,6 +39,9 @@ class _ActivityPageState extends State<ActivityPage> {
   var tanggal_assesment;
   var hasil;
   String linkMateri = '';
+  String now = DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+
+  String RecentText = 'belum ada aktivitas';
 
   Future _getAllData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,6 +72,60 @@ class _ActivityPageState extends State<ActivityPage> {
           tanggal_assesment = _data['tanggal_assesment'];
           hasil = _data['status_skema'];
           _getDataMateri(_data['kompetensi']['id'].toString());
+      } else {
+        print('error1');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error2');
+    } on FormatException {
+      print('error3');
+    }
+  }
+
+   Future _getRecentActivity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserId = prefs.getInt('UserId');
+    AsesiId = prefs.getInt('AsesiId');
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_recent_activity/' + AsesiId.toString());
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          var hasil = json.decode(response.body)['result'].toString();
+          if (hasil != null ) {
+            RecentText = hasil;
+          }
+        });
+        print(RecentText);
+      } else {
+        print('error1');
+      }
+    } on SocketException {
+      print('no internet');
+    } on HttpException {
+      print('error2');
+    } on FormatException {
+      print('error3');
+    }
+  }
+
+  Future _getTemplate() async {
+    try {
+      var url = Uri.parse('https://lsp.intermediatech.id/api/get_dokumen');
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ' + _tokenAuth},
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          var dataRes = json.decode(response.body)['data'];
+          postDataTemplate(dataRes['file_apl_01'], dataRes['file_apl_02']);
+        });
       } else {
         print('error1');
       }
@@ -120,6 +181,12 @@ class _ActivityPageState extends State<ActivityPage> {
     
   }
 
+  Future postDataTemplate(tmp_apl_01, tmp_apl_02) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('tmp_apl_01', tmp_apl_01);
+    prefs.setString('tmp_apl_02', tmp_apl_02);
+  }
+
   void _showToastNotAllowed(BuildContext context, String msg) {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
@@ -137,9 +204,10 @@ class _ActivityPageState extends State<ActivityPage> {
   void initState() {
     super.initState();
     // Pertama Kali widget dijalankan memanggil request
-    
+    _getRecentActivity();
     _getAllData();
     _getDataPengajuan();
+    _getTemplate();
   }
 
 
@@ -322,6 +390,39 @@ class _ActivityPageState extends State<ActivityPage> {
                 Container(width: 15),
               ],
             ),
+            Container(height: 30),
+            Text("Recent Activity", style: MyText.medium(context).copyWith(color: MyColors.grey_90, fontWeight: FontWeight.bold)),
+            Container(height: 10),
+             Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 15),
+               child: Card(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                      color: MyColors.grey_5, elevation: 2, clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 12,
+                              backgroundColor: MyColors.grey_10, child: Icon(Icons.arrow_upward_outlined, color: Color.fromARGB(255, 14, 111, 16), size: 17),
+                            ),
+                            Container(width: 15),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // AutoSizeText(RecentText.toString(), maxLines: 2, style: MyText.subhead(context)!.copyWith(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 14)),
+                                Container(width: (MediaQuery.of(context).size.width) - 120, child: Text(RecentText, overflow: TextOverflow.visible, style: MyText.subhead(context)!.copyWith(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 14))),
+                                Container(height: 5),
+                                Text(now.toString(), style: MyText.caption(context)!.copyWith(color: MyColors.grey_40)),
+                              ],
+                            ),
+                            
+                          ],
+                        ),
+                      ),
+                    ),
+             ),
             ],
         ),
       ),

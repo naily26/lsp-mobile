@@ -38,7 +38,7 @@ class _ValidasiApproveState extends State<ValidasiApprove> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
                   child: Text(
-                    'Data Anda dalam tahap verifikasi admin, silahkan tunggu',
+                    'Akun Anda telah terverifikasi, silahkan melanjutkan pendaftaran',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300,
                     fontSize: 16),

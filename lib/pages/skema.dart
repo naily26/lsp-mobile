@@ -82,13 +82,23 @@ class _SkemaState extends State<Skema> {
                           style: TextStyle(color: Colors.black,
                           fontSize: 18),
                         ),
-                        Text(
-                           _data[index]['start'],
-                          style: TextStyle(color: Color.fromARGB(255, 62, 62, 62), fontWeight: FontWeight.w400,
-                          fontSize: 14),
+                        Row(
+                          children: [
+                            Text(
+                       _data[index]['start'],
+                              style: TextStyle(color: Color.fromARGB(255, 62, 62, 62), fontWeight: FontWeight.w400,
+                              fontSize: 14),
+                            ),
+                            Spacer(),
+                             Text(
+                       _data[index]['end'],
+                              style: TextStyle(color: Color.fromARGB(255, 62, 62, 62), fontWeight: FontWeight.w400,
+                              fontSize: 14),
+                            ),
+                          ],
                         ),
                         // Text(
-                        //   'sampai:' + _data[index]['end'],
+                        //   'sampai: ' + _data[index]['end'],
                         //   style: TextStyle(color: Color.fromARGB(255, 62, 62, 62), fontWeight: FontWeight.w400,
                         //   fontSize: 14),
                         // ),

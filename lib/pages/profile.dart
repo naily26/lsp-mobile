@@ -518,12 +518,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     InkWell(
                       highlightColor: Colors.grey.withOpacity(0.1),
                       splashColor: Colors.grey.withOpacity(0.1),
-                      onTap: () => () {},
+                      onTap: () {
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EditProfilePage()),
+                          );
+                      },
                       child: Container(
                         width: double.infinity,
                         padding:
                             EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                        child: Text("F A Q",
+                        child: Text("Edit Profil",
                             style: MyText.medium(context)
                                 .copyWith(color: MyColors.grey_80)),
                       ),
@@ -532,14 +538,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     InkWell(
                       highlightColor: Colors.grey.withOpacity(0.1),
                       splashColor: Colors.grey.withOpacity(0.1),
-                      onTap: () => () {},
+                      onTap: LogOut,
                       child: Container(
                         width: double.infinity,
                         padding:
                             EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                        child: Text("Privacy Policy",
-                            style: MyText.medium(context)
-                                .copyWith(color: MyColors.grey_80)),
+                        child: Row(
+                          children: [
+                            Text("Keluar ",
+                                style: MyText.medium(context)
+                                    .copyWith(color: MyColors.grey_80)),
+                            Icon(Icons.logout, color: MyColors.grey_80, size: 20,)
+                          ],
+                        ),
                       ),
                     ),
                   ],
