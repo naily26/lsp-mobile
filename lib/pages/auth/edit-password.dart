@@ -140,6 +140,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                   return null;
                 },
                 keyboardType: TextInputType.text,
+                obscureText: passwordHidden,
                 style: TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   labelText: "Kata Sandi Lama",
@@ -175,6 +176,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                   return null;
                 },
                 keyboardType: TextInputType.text,
+                obscureText: passwordHidden,
                 style: TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   labelText: "Kata Sandi Baru",
@@ -210,6 +212,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                   return null;
                 },
                 keyboardType: TextInputType.text,
+                obscureText: passwordHidden,
                 style: TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   labelText: "Konfirmasi kata sandi lama",

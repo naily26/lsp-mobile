@@ -7,6 +7,7 @@ import 'package:my_final/pages/auth/decline.dart';
 import 'package:my_final/pages/auth/approve.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 import 'dart:async';
 import 'package:my_final/widget/my_text.dart';
@@ -441,10 +442,11 @@ class CustomEventDialogState extends State<CustomEventDialog> {
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(18.0)),
                       ),
-                      child: Text("WhatsApp",
+                      child: Text("Kontak admin",
                           style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        _launchUrl();
+                      onPressed: () async {
+                        await Clipboard.setData(ClipboardData(text: no_wa));
+                        // _launchUrl();
                         MyToast.show("WhatsApp clicked", context);
                       },
                     ),
